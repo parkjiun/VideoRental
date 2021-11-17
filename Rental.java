@@ -16,8 +16,8 @@ public class Rental {
 		return video;
 	}
 
-	public void setVideo(Video video) {
-		this.video = video;
+	public boolean isRented() {
+		return video.isRented();
 	}
 
 	public int getStatus() {
@@ -25,37 +25,31 @@ public class Rental {
 	}
 
 	public void returnVideo() {
-		if ( status == 1 ) {
+		if ( status == 0 ) {
 			this.status = 1;
 			returnDate = new Date() ;
+			video.setRented(false);
 		}
 	}
+
 	public Date getRentDate() {
 		return rentDate;
-	}
-
-	public void setRentDate(Date rentDate) {
-		this.rentDate = rentDate;
 	}
 
 	public Date getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(Date returnDate) {
-		this.returnDate = returnDate;
-	}
-
 	public int getDaysRentedLimit() {
 		int limit = 0 ;
 		int daysRented ;
+		long diff;
 		if (getStatus() == 1) { // returned Video
-			long diff = returnDate.getTime() - rentDate.getTime();
-			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+			diff = returnDate.getTime() - rentDate.getTime();
 		} else { // not yet returned
-			long diff = new Date().getTime() - rentDate.getTime();
-			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+			diff = new Date().getTime() - rentDate.getTime();
 		}
+		daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
 		if ( daysRented <= 2) return limit ;
 
 		switch ( video.getVideoType() ) {
@@ -64,5 +58,9 @@ public class Rental {
 			case Video.DVD: limit = 2 ; break ;
 		}
 		return limit ;
+	}
+
+	public boolean hasVideo(String videoTitle) {
+		return videoTitle.equals(video.getTitle());
 	}
 }
