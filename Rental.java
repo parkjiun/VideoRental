@@ -1,6 +1,9 @@
 import java.util.Date;
 
 public class Rental {
+	public static final int VHS_RENTAL_DAYS_LIMIT = 5;
+	public static final int CD_RENTAL_DAYS_LIMIT = 3;
+	public static final int DVD_RENTAL_DAYS_LIMIT = 2;
 	private Video video ;
 	private int status ; // 0 for Rented, 1 for Returned
 	private Date rentDate ;
@@ -52,12 +55,18 @@ public class Rental {
 		daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
 		if ( daysRented <= 2) return limit ;
 
-		switch ( video.getVideoType() ) {
-			case Video.VHS: limit = 5 ; break ;
-			case Video.CD: limit = 3 ; break ;
-			case Video.DVD: limit = 2 ; break ;
+		switch (video.getVideoType()) {
+			case Video.VHS:
+				limit = VHS_RENTAL_DAYS_LIMIT;
+				break;
+			case Video.CD:
+				limit = CD_RENTAL_DAYS_LIMIT;
+				break;
+			case Video.DVD:
+				limit = DVD_RENTAL_DAYS_LIMIT;
+				break;
 		}
-		return limit ;
+		return limit;
 	}
 
 	public boolean hasVideo(String videoTitle) {
